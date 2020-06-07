@@ -28,6 +28,12 @@ avgAge = mean(data.age);
 figure
 histogram(data.age);
 
+data.localization = categorical(data.localization, {'abdomen' 'acral' 'back' 'chest' 'ear' 'face' 'foot' 'genital' 'hand' 'lower extremity' 'neck' 'scalp' 'trunk' 'unknown' 'upper extremity'});
+
+figure
+histogram(data.localization)
+title('Localzation Percentage')
+
 data.sex = categorical(data.sex, {'male' 'female'});
 
 figure
