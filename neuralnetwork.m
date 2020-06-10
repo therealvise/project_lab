@@ -1,3 +1,40 @@
+folder = '/Users/lucadisimone/Desktop/Lab_Multimedialità/54339_104884_bundle_archive/HAM10000_images_part_2';
+myImages = imageSet(folder);
+
+imds = imageDatastore(folder, 'LabelSource', 'foldernames', 'IncludeSubfolders',true);
+
+% Find the first instance of an image for each category
+nv = find(imds.Labels == 'HAM10000_images_part_2', 1);
+
+figure
+imshow(readimage(imds,nv))
+
+numTrainFiles = 8012;
+[imdsTrain,imdsValidation] = splitEachLabel(imds,numTrainFiles,'randomize');
+
+inputSize = [450 600 3];
+numClasses = 1;
+
+layers = [
+    imageInputLayer(inputSize)
+    convolution2dLayer(5,20)
+    batchNormalizationLayer
+    reluLayer
+    fullyConnectedLayer(numClasses)
+    softmaxLayer
+    classificationLayer];
+
+options = trainingOptions('sgdm', ...
+    'MaxEpochs',4, ...
+    'ValidationData',imdsValidation, ...
+    'ValidationFrequency',30, ...
+    'Verbose',false, ...
+    'Plots','training-progress');
+
+net = trainNetwork(imdsTrain,layers,options);
+
+
+
 % Importing Dataset after download it by Kaggle Website
 data = readtable('HAM10000_metadata.csv');
 head(data,5)
@@ -48,42 +85,3 @@ P = 0.80 ;
 idx = randperm(m)  ;
 Training = data(idx(1:round(P*m)),:) ; 
 Testing = data(idx(round(P*m)+1:end),:) ;
-
-
-
-layers = [
-    imageInputLayer([75 100 3])
-    
-    convolution2dLayer(3,16,'Padding','same')
-    batchNormalizationLayer
-    reluLayer
-    
-    maxPooling2dLayer(2,'Stride',2)
-    
-    convolution2dLayer(3,32,'Padding','same')
-    batchNormalizationLayer
-    reluLayer
-    
-    maxPooling2dLayer(2,'Stride',2)
-    
-    convolution2dLayer(3,64,'Padding','same')
-    batchNormalizationLayer
-    reluLayer
-    
-    fullyConnectedLayer(10)
-    softmaxLayer
-    classificationLayer];
-
-
-options = trainingOptions('sgdm', ...
-    'InitialLearnRate',0.01, ...
-    'MaxEpochs',4, ...
-    'Shuffle','every-epoch', ...
-    'ValidationData',Testing, ...
-    'ValidationFrequency',30, ...
-    'Verbose',false, ...
-    'Plots','training-progress');
-
-net = trainNetwork(Training,layers,options);
-
-
