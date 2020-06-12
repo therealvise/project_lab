@@ -1,87 +1,64 @@
-folder = '/Users/lucadisimone/Desktop/Lab_Multimedialità/54339_104884_bundle_archive/HAM10000_images_part_2';
-myImages = imageSet(folder);
+net = alexnet;
+analyzeNetwork(net)
+inputSize = net.Layers(1).InputSize;
 
-imds = imageDatastore(folder, 'LabelSource', 'foldernames', 'IncludeSubfolders',true);
+folder_train = '/Users/gianlucavisentin/Desktop/monkeys_project/data_train';
+myImages_train = imageSet(folder_train);
 
-% Find the first instance of an image for each category
-nv = find(imds.Labels == 'HAM10000_images_part_2', 1);
+folder_validation = '/Users/gianlucavisentin/Desktop/monkeys_project/data_val';
+myImages_val = imageSet(folder_validation);
 
-figure
-imshow(readimage(imds,nv))
+imdsTrain = imageDatastore(folder_train, 'LabelSource', 'foldernames', 'IncludeSubfolders',true);
+imdsValidation = imageDatastore(folder_validation, 'LabelSource', 'foldernames', 'IncludeSubfolders',true);
+%imdsValidation = imageDatastore('validation', 'IncludeSubfolders', true, 'LabelSource', 'foldernames');
+[trainingImages, testImages] = splitEachLabel(imdsTrain, 0.8, 'randomize');
+layers = net.Layers;
 
-numTrainFiles = 8012;
-[imdsTrain,imdsValidation] = splitEachLabel(imds,numTrainFiles,'randomize');
+layersTransfer = net.Layers(1:end-3);
 
-inputSize = [450 600 3];
-numClasses = 1;
+
+numClasses = 10;
 
 layers = [
-    imageInputLayer(inputSize)
-    convolution2dLayer(5,20)
-    batchNormalizationLayer
-    reluLayer
-    fullyConnectedLayer(numClasses)
+    layersTransfer
+    fullyConnectedLayer(numClasses,'WeightLearnRateFactor',20,'BiasLearnRateFactor',20)
     softmaxLayer
     classificationLayer];
 
+pixelRange = [-30 30];
+imageAugmenter = imageDataAugmenter( ...
+    'RandXReflection',true, ...
+    'RandXTranslation',pixelRange, ...
+    'RandYTranslation',pixelRange);
+augimdsTrain = augmentedImageDatastore(inputSize(1:2),trainingImages, ...
+    'DataAugmentation',imageAugmenter);
+
+augimdsValidation = augmentedImageDatastore(inputSize(1:2),testImages);
+
 options = trainingOptions('sgdm', ...
-    'MaxEpochs',4, ...
-    'ValidationData',imdsValidation, ...
-    'ValidationFrequency',30, ...
+    'MiniBatchSize',10, ...
+    'MaxEpochs',6, ...
+    'InitialLearnRate',1e-4, ...
+    'Shuffle','every-epoch', ...
+    'ValidationData',augimdsValidation, ...
+    'ValidationFrequency',3, ...
     'Verbose',false, ...
     'Plots','training-progress');
 
-net = trainNetwork(imdsTrain,layers,options);
+netTransfer = trainNetwork(augimdsTrain,layers,options);
+
+[YPred,scores] = classify(netTransfer,augimdsValidation);
+
+YValidation = testImages.Labels;
+accuracy = mean(YPred == YValidation)
 
 
-
-% Importing Dataset after download it by Kaggle Website
-data = readtable('HAM10000_metadata.csv');
-head(data,5)
-
-% Statistics about counting for each sensible column
-G1 = groupcounts(data,'age');
-disp(G1);
-
-G2 = groupcounts(data,'sex');
-disp(G2);
-
-
-G3 = groupcounts(data,'localization');
-disp(G3);
-
-% Look about missing values after scan rows
-vars = data.Properties.VariableNames;
+idx = randperm(numel(testImages.Files),12);
 figure
-imagesc(ismissing(data))
-ax = gca;
-ax.XTick = 1:12;
-ax.XTickLabel = vars;
-ax.XTickLabelRotation = 90;
-title('Missing Rows Values')
-
-avgAge = mean(data.age);
-disp(avgAge)
-
-figure
-histogram(data.age);
-
-data.sex = categorical(data.sex, {'male' 'female'});
-
-figure
-histogram(data.sex)
-title('Gender Percentage')
-
-data.localization = categorical(data.localization, {'abdomen' 'acral' 'back' 'chest' 'ear' 'face' 'foot' 'genital' 'hand' 'lower extremity' 'neck' 'scalp' 'trunk' 'unknown' 'upper extremity'});
-                                                    
-                                                    
-                                                    
-figure
-histogram(data.localization)
-title('Localization Percentage')   
-
-[m,n] = size(data);
-P = 0.80 ;
-idx = randperm(m)  ;
-Training = data(idx(1:round(P*m)),:) ; 
-Testing = data(idx(round(P*m)+1:end),:) ;
+for i = 1:12
+    subplot(4,4,i)
+    I = readimage(testImages,idx(i));
+    imshow(I)
+    label = YPred(idx(i));
+    title(string(label));
+end
