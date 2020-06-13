@@ -11,10 +11,10 @@ inputSize = net.Layers(1).InputSize;
 
 % Import immagini da locale. In caso di esecuzione su una macchina diversa,
 % cambiare il percorso
-folder_train = '/Users/gianlucavisentin/Desktop/monkeys_project/data_train';
+folder_train = '/Users/nomeutente/Desktop/monkeys_project/data_train';
 myImages_train = imageSet(folder_train);
 
-folder_validation = '/Users/gianlucavisentin/Desktop/monkeys_project/data_val';
+folder_validation = '/Users/nomeutente/Desktop/monkeys_project/data_val';
 myImages_val = imageSet(folder_validation);
 
 imdsTrain = imageDatastore(folder_train, 'LabelSource', 'foldernames', 'IncludeSubfolders',true);
@@ -50,7 +50,7 @@ augimdsTrain = augmentedImageDatastore(inputSize(1:2),trainingImages, ...
 augimdsValidation = augmentedImageDatastore(inputSize(1:2),testImages);
 
 % Nel caso di un'esecuzione più veloce si può diminuire il numero di
-% epoche, riducendo le iterazionii
+% epoche, riducendo le iterazioni
 options = trainingOptions('sgdm', ...
     'MiniBatchSize',10, ...
     'MaxEpochs',6, ...
