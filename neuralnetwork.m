@@ -9,7 +9,7 @@ net = alexnet;
 analyzeNetwork(net)
 inputSize = net.Layers(1).InputSize;
 
-% Import immagini da locale. In caso di esecuzione su una macchina diversa,
+% Import delle immagini da locale. In caso di esecuzione su una macchina diversa,
 % cambiare il percorso
 folder_train = '/Users/nomeutente/Desktop/monkeys_project/data_train';
 myImages_train = imageSet(folder_train);
