@@ -13,28 +13,22 @@ inputSize = net.Layers(1).InputSize;
 % cambiare il percorso
 folder_train = '/Users/nomeutente/Desktop/monkeys_project/data_train';
 myImages_train = imageSet(folder_train);
+imdsTrain = imageDatastore(folder_train, 'LabelSource', 'foldernames', 'IncludeSubfolders', true);
 
-folder_validation = '/Users/nomeutente/Desktop/monkeys_project/data_val';
-myImages_val = imageSet(folder_validation);
-
-imdsTrain = imageDatastore(folder_train, 'LabelSource', 'foldernames', 'IncludeSubfolders',true);
-imdsValidation = imageDatastore(folder_validation, 'LabelSource', 'foldernames', 'IncludeSubfolders',true);
-
-% Training:Test split 80-20
+% Training: Test split 80-20
 [trainingImages, testImages] = splitEachLabel(imdsTrain, 0.8, 'randomize');
 layers = net.Layers;
-
 layersTransfer = net.Layers(1:end-3);
 
-
+% Numero di classi di appartenenza delle scimmie
 numClasses = 10;
+
 % Definizione dei layers convoluzionali 
 layers = [
     layersTransfer
     fullyConnectedLayer(numClasses,'WeightLearnRateFactor',20,'BiasLearnRateFactor',20)
     softmaxLayer
     classificationLayer];
-
 pixelRange = [-30 30];
 
 % Data augmentation viene introdotto per migliorare i risultati ed evitare
@@ -49,6 +43,7 @@ augimdsTrain = augmentedImageDatastore(inputSize(1:2),trainingImages, ...
 
 augimdsValidation = augmentedImageDatastore(inputSize(1:2),testImages);
 
+% Set di opzioni per l'allenamento di una rete
 % Nel caso di un'esecuzione più veloce si può diminuire il numero di
 % epoche, riducendo le iterazioni
 options = trainingOptions('sgdm', ...
@@ -61,6 +56,7 @@ options = trainingOptions('sgdm', ...
     'Verbose',false, ...
     'Plots','training-progress');
 
+% Rete allenata
 netTransfer = trainNetwork(augimdsTrain,layers,options);
 
 [YPred,scores] = classify(netTransfer,augimdsValidation);
@@ -68,7 +64,7 @@ netTransfer = trainNetwork(augimdsTrain,layers,options);
 YValidation = testImages.Labels;
 accuracy = mean(YPred == YValidation)
 
-% Print di un esempio per ogni immagine, appartenente ad una classe
+% Stampa 12 immagini randomiche, appartenenti alla loro classe di appartenenza.
 idx = randperm(numel(testImages.Files),12);
 figure
 for i = 1:12
