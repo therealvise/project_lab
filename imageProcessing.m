@@ -3,7 +3,8 @@
 %Le immagini del Dataset di partenza sono modificate applicando rumore Gaussiano e filtro di Wiener.
 %In entrambi i casi le immagini sono state salvate in due directory distinte per poter essere analizzate separatamente.
 
-%Percorso della cartella dove sono presenti le immagini della i-esima specie di scimmia del Dataset 
+%Percorso della cartella dove sono presenti le immagini della i-esima specie di scimmia del Dataset
+%In caso di esecuzione su una macchina diversa, cambiare il percorso
 path_directory='/Users/nomeUtente/Desktop/10449_44567_bundle_archive/training/training/n0'; 
 original_files=dir([path_directory '/*.jpg']);
 
