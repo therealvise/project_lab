@@ -11,7 +11,7 @@ inputSize = net.Layers(1).InputSize;
 
 % Import delle immagini da locale. In caso di esecuzione su una macchina diversa,
 % cambiare il percorso
-folder_train = '/Users/nomeutente/Desktop/monkeys_project/training';
+folder_train = '/Users/nomeUtente/Desktop/monkeys_project/training';
 myImages_train = imageSet(folder_train);
 imdsTrain = imageDatastore(folder_train, 'LabelSource', 'foldernames', 'IncludeSubfolders', true);
 
