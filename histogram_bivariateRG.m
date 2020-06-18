@@ -13,8 +13,8 @@ histogram2(r,g,'DisplayStyle','tile','ShowEmptyBins','on', ...
     'XBinLimits',[0 255],'YBinLimits',[0 255]);
 axis equal
 colorbar
-xlabel('Red Values')
-ylabel('Green Values')
-title('Green vs. Red Pixel Components')
+xlabel('Valori Rosso')
+ylabel('Valori Blu')
+title('Componenti a pixel Verde vs. Rosso')
 ax = gca;
 ax.CLim = [0 500];
