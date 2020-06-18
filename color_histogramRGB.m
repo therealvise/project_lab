@@ -1,3 +1,9 @@
+
+% In questo script andiamo ad effettuare un'analisi sui colori.
+% Nello specifico elaboriamo l'immagine a colori "n0021.png" raffigurante un esempio di scimmia appartenente
+% alla specie 'Alouatta Palliata'.
+% Confermiamo i risultati creando un istogramma dei colori nello spazio di colore RGB.
+
 rgb = imread ('/Users/nomeutente/Desktop/monkeys_project/data_train/n0/n0021.jpg');
 imshow(rgb)
 histogram(r,'BinMethod','integers','FaceColor','r','EdgeAlpha',0,'FaceAlpha',1)
