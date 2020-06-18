@@ -3,7 +3,7 @@
 % alla specie 'Alouatta Palliata' tracciando un istogramma bivariato dei valori RGB Blu e Rosso per ogni pixel,
 % per visualizzare la distribuzione del colore.
 
-rgb = imread ('/Users/nomeutente/Desktop/monkeys_project/training/n0/n0021.jpg');
+rgb = imread ('/Users/nomeUtente/Desktop/monkeys_project/training/n0/n0021.jpg');
 imshow(rgb)
 histogram2(r,b,'DisplayStyle','tile','ShowEmptyBins','on',...
     'XBinLimits',[0 255],'YBinLimits',[0 255]);
