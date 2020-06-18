@@ -5,7 +5,7 @@
 % Nei vari casi le immagini sono state salvate in tre directory distinte per poter essere analizzate separatamente.
 
 % Percorso della cartella dove sono presenti le immagini della i-esima specie di scimmia del Dataset 
-path_directory='/Users/lucadisimone/Desktop/Lab_Multimedialità/10449_44567_bundle_archive/training/training/n0';
+path_directory='/Users/nomeUtente/Desktop/monkeys_project/training/training/n0';
 original_files=dir([path_directory '/*.jpg']);
 
 % Ciclo per scorrere tutte le immagini della cartella per k che va da 1 fino all'ultimo elemento della cartella
@@ -16,10 +16,10 @@ for k=1:length(original_files)
     pristineRGB = imread(filename);
     pristineRGB = im2double(pristineRGB);
     J = imresize(pristineRGB, 0.5);
-    destination='/Users/lucadisimone/Desktop/ResizeRGB/ResizeRGB';
+    destination='/Users/nomeUtente/Desktop/ResizeRGB/ResizeRGB';
     imwrite(J,[destination,num2str(k),'.jpg']);
     noisyRGB = imnoise(J,'gaussian',0,0.01);
-    destination='/Users/lucadisimone/Desktop/NoiseRGBr/NoiseRGBr';
+    destination='/Users/nomeUtente/Desktop/NoiseRGBr/NoiseRGBr';
     imwrite(noisyRGB,[destination,num2str(k),'.jpg']);
     [noisyR,noisyG,noisyB] = imsplit(noisyRGB);
     net = denoisingNetwork('dncnn');
@@ -31,6 +31,6 @@ for k=1:length(original_files)
     denoisedPSNR = psnr(denoisedRGB,J);
     noisySSIM = ssim(noisyRGB,J);
     denoisedSSIM = ssim(denoisedRGB,J);
-    destination='/Users/lucadisimone/Desktop/RemoveNoiseRGBr/RemoveNoiseRGBr';
+    destination='/Users/nomeUtente/Desktop/RemoveNoiseRGBr/RemoveNoiseRGBr';
     imwrite(denoisedRGB,[destination,num2str(k),'.jpg']);
 end
