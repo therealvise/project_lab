@@ -5,7 +5,7 @@
 
 % Percorso della cartella dove sono presenti le immagini della i-esima specie di scimmia del Dataset
 % In caso di esecuzione su una macchina diversa, cambiare il percorso
-path_directory='/Users/nomeUtente/Desktop/10449_44567_bundle_archive/training/training/n0'; 
+path_directory='/Users/nomeUtente/Desktop/monkeys_project/training/training/n0'; 
 original_files=dir([path_directory '/*.jpg']);
 
 % Ciclo per scorrere tutte le immagini della cartella per k che va da 1 fino all'ultimo elemento della cartella
@@ -15,9 +15,9 @@ for k=1:length(original_files)
     R = imread(filename)
     I = rgb2gray(R);
     J = imnoise(I,'gaussian',0,0.025);
-    destination='/Users/nomeUtente/Desktop/Noise/n0Noise/'; 
+    destination='/Users/nomeUtente/Desktop/NoiseGrayScale/n0/'; 
     imwrite(J,[destination,num2str(k),'.jpg']);
     K = wiener2(J,[5 5]);
-    destination='/Users/nomeUtente/Desktop/Wiener/n0WienerFiltered/'; 
+    destination='/Users/nomeUtente/Desktop/WienerGrayScale/n0/'; 
     imwrite(K,[destination,num2str(k),'.jpg']);
 end
