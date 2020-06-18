@@ -16,10 +16,10 @@ for k=1:length(original_files)
     pristineRGB = imread(filename);
     pristineRGB = im2double(pristineRGB);
     J = imresize(pristineRGB, 0.5);
-    destination='/Users/nomeUtente/Desktop/ResizeRGB/ResizeRGB';
+    destination='/Users/nomeUtente/Desktop/ResizeRGB/n0/';
     imwrite(J,[destination,num2str(k),'.jpg']);
     noisyRGB = imnoise(J,'gaussian',0,0.01);
-    destination='/Users/nomeUtente/Desktop/NoiseRGBr/NoiseRGBr';
+    destination='/Users/nomeUtente/Desktop/ResizeNoiseRGB/n0/';
     imwrite(noisyRGB,[destination,num2str(k),'.jpg']);
     [noisyR,noisyG,noisyB] = imsplit(noisyRGB);
     net = denoisingNetwork('dncnn');
@@ -31,6 +31,6 @@ for k=1:length(original_files)
     denoisedPSNR = psnr(denoisedRGB,J);
     noisySSIM = ssim(noisyRGB,J);
     denoisedSSIM = ssim(denoisedRGB,J);
-    destination='/Users/nomeUtente/Desktop/RemoveNoiseRGBr/RemoveNoiseRGBr';
+    destination='/Users/nomeUtente/Desktop/ResizeDenoisedRGB/n0/';
     imwrite(denoisedRGB,[destination,num2str(k),'.jpg']);
 end
