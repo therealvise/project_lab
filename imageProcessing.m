@@ -8,7 +8,7 @@
 path_directory='/Users/nomeUtente/Desktop/10449_44567_bundle_archive/training/training/n0'; 
 original_files=dir([path_directory '/*.jpg']);
 
-% Ciclo per scorrere tutte le immagini della cartella per k che da 1 all'ultimo elemento della cartella
+% Ciclo per scorrere tutte le immagini della cartella per k che va da 1 fino all'ultimo elemento della cartella
 % Ad ogni immagine è stato applicato nell'ordine: conversione da RGB a scala di grigi, rumore Gaussiano e filtro di Wiener.
 for k=1:length(original_files)
     filename=[path_directory '/' original_files(k).name];
