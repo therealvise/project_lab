@@ -14,7 +14,7 @@ histogram2(r,g,'DisplayStyle','tile','ShowEmptyBins','on', ...
 axis equal
 colorbar
 xlabel('Valori Rosso')
-ylabel('Valori Blu')
+ylabel('Valori Verde')
 title('Componenti a pixel Verde vs. Rosso')
 ax = gca;
 ax.CLim = [0 500];
