@@ -15,10 +15,9 @@ for k=1:length(original_files)
     filename=[path_directory '/' original_files(k).name];
     I = imread(filename)
     J = imnoise(I,'salt & pepper', 0.005);
-    [noisyR,noisyG,noisyB] = imsplit(J);
-    noisedRGB = cat(3,noisyR,noisyG,noisyB);
     destination='/Users/nomeUtente/Desktop/SaltPepperRGB/n0/';
-    imwrite(noisedRGB,[destination,num2str(k),'.jpg']);
+    imwrite(J,[destination,num2str(k),'.jpg']);
+    [noisyR,noisyG,noisyB] = imsplit(J);
     I = rgb2gray(I);
     x = wiener2(J(:,:,1), [8 8]);
     y = wiener2(J(:,:,2), [8 8]);
