@@ -27,10 +27,6 @@ for k=1:length(original_files)
     denoisedG = denoiseImage(noisyG,net);
     denoisedB = denoiseImage(noisyB,net);
     denoisedRGB = cat(3,denoisedR,denoisedG,denoisedB);
-    noisyPSNR = psnr(noisyRGB,J);
-    denoisedPSNR = psnr(denoisedRGB,J);
-    noisySSIM = ssim(noisyRGB,J);
-    denoisedSSIM = ssim(denoisedRGB,J);
     destination='/Users/nomeUtente/Desktop/ResizeDenoisedRGB/n0/';
     imwrite(denoisedRGB,[destination,num2str(k),'.jpg']);
 end
